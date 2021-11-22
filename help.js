@@ -210,6 +210,7 @@ function doHelpTroop(){
     );
     if (p) {
         target = images.clip(captureScreen(), p.x, p.y-130, 130, 130)
+        var findIt = false;
         // images.save(target, "./coc_picture/tmp.jpg", "jpg",100)
         for(var i = 0;i<troop_pic_length;i++){
             if(troop_pic[i]){
@@ -221,12 +222,13 @@ function doHelpTroop(){
                     toastLog("find it in troop_pic! index:"+i);
                     donate_troop.push(i);
                     sleep(1000);
+                    findIt = true;
                     break;
-                }else{
-                    toastLog("can not find it in troop_pic!");
                 }
             }
-            
+        }
+        if(!findIt){
+            toastLog("can not find it in troop_pic")
         }
         clickAndSleep(p.x+50, p.y-50);
         target.recycle()
@@ -259,6 +261,7 @@ function doHelpSpell(){
     if (p) {
         target = images.clip(captureScreen(), p.x, p.y-130, 130, 130)
         images.save(target, "./coc_picture/tmp.jpg", "jpg",100)
+        var findIt = false;
         for(var i = 0;i<spell_pic_length;i++){
             if(spell_pic[i]){
                 let pp = findImage(target, spell_pic[i],
@@ -269,12 +272,13 @@ function doHelpSpell(){
                     toastLog("find it in spell_pic! index:"+i);
                     donate_spell.push(i);
                     sleep(1000);
+                    findIt = true;
                     break;
-                }else{
-                    toastLog("can not find it in spell_pic!");
                 }
             }
-            
+        }
+        if(!findIt){
+            toastLog("can not find it in spell_pic");
         }
         clickAndSleep(p.x+50, p.y-50);
         target.recycle()
@@ -295,7 +299,7 @@ function moreResource(){
     var toMachine = false;
     for(var i = 0;i<donate_troop.length;i++){
         if(0<=donate_troop[i]&&donate_troop[i]<=14){
-            clickAndSleep(normalTroop_x+Math.floor(i/2)*square_length,normalTroop_y+(i%2)*square_length)
+            clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
         }else if (15<=donate_troop[i]&&donate_troop[i]<=23){
             if(!toDark){
                 swipe(1500, 700, 500, 700, 500);
@@ -315,11 +319,12 @@ function moreResource(){
             toastLog("军队制造列表混进来了奇怪的东西"+i);
         }
     }
+    donate_troop.length = 0;
 
     clickAndSleep(makeSpell_x,makeSpell_y);
     for(var i = 0;i<donate_spell.length;i++){
         if(0<=donate_spell[i]&&donate_spell[i]<=6){
-            clickAndSleep(normalSpell_x+Math.floor(i/2)*square_length,normalSpell_y+(i%2)*square_length)
+            clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
         }else if (7<=donate_spell[i]&&donate_spell[i]<=11){
             var tmp = donate_spell[i]-7;
             clickAndSleep(darkSpell_x+Math.floor(tmp/2)*square_length,darkSpell_y+(tmp%2)*square_length);
@@ -327,6 +332,7 @@ function moreResource(){
             toastLog("法术制造列表混进来了奇怪的东西"+i);
         }
     }
+    donate_spell.length = 0;
 
     clickAndSleep(trainOff_x,trainOff_y);
 

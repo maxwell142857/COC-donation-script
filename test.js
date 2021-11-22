@@ -96,7 +96,18 @@ function main() {
     //     testHelp(test_pic,"test"+i+":")
     //     test_pic.recycle()
     // }
-    swipe(1500, 700, 500, 700, 500)
+    let target = images.read("./coc_picture/tmp.jpg")
+    let xiaodian = images.read("./coc_picture/spell_shanDian.jpg")
+    let pp = findImage(target, xiaodian,
+        {
+            threshold: 0.9
+        });
+    if(pp){
+        toastLog("find it in spell_pic!");
+    }else{
+        toastLog("not find");
+    }
+    
     for(var i = 0;i<troop_pic_length;i++){
         if(troop_pic[i]){
             troop_pic[i].recycle();
