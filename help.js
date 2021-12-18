@@ -1,56 +1,56 @@
-let chatOn_x = Number(135)
+setScreenMetrics(1080, 2312);//这行代码可以让auto.js根据手机的型号自动调整点击的位置 this line can make auto.js adjust the clicking point due to moblie's type
+let chatOn_x = Number(135) //打开部落聊天 open chat
 let chatOn_y = Number(480)
-let chatOff_x = Number(840)
+let chatOff_x = Number(840)//关闭部落聊天 close chat
 let chatOff_y = Number(480)
-let trainOn_x = Number(135)
+let trainOn_x = Number(135) //打开训练部队 open training
 let trainOn_y = Number(780)
-let trainOff_x = Number(1995)
+let trainOff_x = Number(1995) //关闭训练部队 close training
 let trainOff_y = Number(50)
-let attack_x = Number(180)
+let attack_x = Number(180) //发起进攻 attack!
 let attack_y = Number(950)
-let most_right_x = Number(2300)
+let most_right_x = Number(2300) //屏幕边缘点，用于返回  margin of screen, using for back
 let most_right_y = Number(525)
  
-let trainTroop_x = Number(760)
+let trainTroop_x = Number(760) //在训练界面，进入军队训练 in training,step into train troops
 let trainTroop_y = Number(70)
-let makeSpell_x = Number(1090)
+let makeSpell_x = Number(1090) // 在训练界面，进入法术配置 in training,step into brew spell
 let makeSpell_y = Number(70)
 let makeMachine_x = Number(1440)
 let makeMachine_y = Number(70)
-let normalTroop_x = Number(385) //savage's center
-let normalTroop_y = Number(655) //savage's center
-let darkTroop_x = Number(1125) //minion's center
-let darkTroop_y = Number(655) //minion's center
-let normalSpell_x = Number(385) //shanDian's center
-let normalSpell_y = Number(655) //shanDian's center
-let darkSpell_x = Number(1185) //duYao's center
-let darkSpell_y = Number(655) //duYao's center
-let square_length = Number(200) //square length in troop and spell
-let machine_x = Number(470) //zhanche's center
-let machine_y = Number(750) //zhanche's center
-let machine_square_length = Number(335) //square length in machine
+let normalTroop_x = Number(385) //野蛮人 barbarian
+let normalTroop_y = Number(655) 
+let darkTroop_x = Number(1125) //亡灵 minion
+let darkTroop_y = Number(655) 
+let normalSpell_x = Number(385) //闪电 lighting spell
+let normalSpell_y = Number(655) 
+let darkSpell_x = Number(1185) //毒药 poison spell 
+let darkSpell_y = Number(655)  
+let square_length = Number(200) //军队和法术一个格子的长度 square length in troop and spell
+let machine_x = Number(470) //攻城战车 wall wrecker
+let machine_y = Number(750) 
+let machine_square_length = Number(335) //攻城机器一个格子的长度 square length in siege machine
 
-let help_panel_troop_x_start = Number(850)
-let help_panel_troop_y_start = Number(0)
-let help_panel_troop_x_range = Number(1000)
-let help_panel_troop_y_range = Number(1000)
-let helpOff_x = Number(1800)
+let helpOff_x = Number(1800) //在向某人增援时，关闭增援  when donating to certain guy, close the page
 let helpOff_y = Number(125)
 
-let help = images.read("./coc_picture/help.jpg")
-let quick_help = images.read("./coc_picture/quick_help.jpg")
-let chat_up = images.read("./coc_picture/chat_up.jpg")
-let chat_lowest = images.read("./coc_picture/chat_lowest.jpg")
-let attack_mode = images.read("./coc_picture/attack.jpg")
+let help = images.read("./coc_picture/help.jpg") //增援 donate
+let quick_help = images.read("./coc_picture/quick_help.jpg") //快速增援 quick donate
+let chat_up = images.read("./coc_picture/chat_up.jpg") //聊天窗口上滑  move up the chat window
+let chat_lowest = images.read("./coc_picture/chat_lowest.jpg")//聊天窗口回到最底部 move the chat window to lowest
+let attack_mode = images.read("./coc_picture/attack.jpg") //进入进攻页面后 when step into the attack page
 
-let blue_pixel = -12748363; //we use this pixel to decide which square is donatable troop
-let purple_pixel = -9615939;//we use this pixel to decide which square is donatable spell
-let green_pixel = -4861641;//we use this pixel to decide which square is quick donatable
+let blue_pixel = -12748363;// 这个像素点用于识别可增援的部队 we use this pixel to decide which square is donatable troop
+let purple_pixel = -9615939;//这个像素点用于识别可增援的法术 we use this pixel to decide which square is donatable spell
 let duration_in_minute = Number(220);//the longest time you can be online is 4 hours,so you need relaunch the app less than 4 hour
 
 //接下来的这个数组用于存储所有兵种图片，0是野蛮人，1是弓箭手，2是巨人，3是哥布林，4是炸弹人，5是气球，6是法师，7是天使，8是火龙，9是皮卡
 //10是龙宝，11是矿工，12是雷龙，13是雪怪，14是龙骑士，注意在造兵页面这里有空格，15是亡灵，16是野猪，17女武神，18石头人，19女巫，20天狗，
 //21蓝胖，22冰人，23猎手,24战车,25飞艇,26大气球,27训练营,28滚木车
+//the following array is used to store all the pictures of troop and siege machine. 0 barbarin,1 archer,2 giant,3 goblin,4 wall breaker,
+//5 balloon,6 wizard,7 healer,8 dragon,9 PEKKA,10 baby dragon,11 miner,12 electron dragon,13 yeti, 14 dragon rider, attention there is space in page,
+//15 mininon,16 hog rider,17 valkyrie,18 golem,19 witch,20 lava hound,21 bowler,22 ice golem,23 headhunter
+//24 wall wrecker,25 battle blimp,26 stone slammer,27 siege barracks,28 log laucher
 var troop_pic=new Array();
 troop_pic[0] = images.read("./coc_picture/troop_savage.jpg")
 troop_pic[1] = images.read("./coc_picture/troop_archar.jpg")
@@ -84,6 +84,8 @@ troop_pic[28] = images.read("./coc_picture/machine_gunMu.jpg")
 troop_pic_length = Number(29)
 
 //接下来这个数组用于存放法术的图片,0闪电,1治疗,2狂暴,3弹跳,4冰冻,5镜像,6隐身,注意在造法术页面这里有空格,7毒药,8地震,9急速,10骷髅,11蝙蝠
+//the following array is used to store all the pictures of spell, 0 lighting,1 healing,2 rage,3 jump,4 freeze,5 clone,6 invisibility
+//attention there is space in page,7 poison,8 earthquake,9 haste,10 skeleton,11 bat
 var spell_pic = new Array();
 spell_pic[0] = images.read("./coc_picture/spell_shanDian.jpg")
 spell_pic[1] = images.read("./coc_picture/spell_zhiLiao.jpg")
@@ -99,10 +101,9 @@ spell_pic[10] = images.read("./coc_picture/spell_kuLou.jpg")
 spell_pic[11] = images.read("./coc_picture/spell_bianFu.jpg")
 spell_pic_length = Number(12)
 
+var donate_troop =new Array();//记录捐出兵种和攻城机器的编号，用于补充 record the index of donating troop and siege machine to supply them
+var donate_spell =new Array();//记录捐出法术的编号，用于补充 record the index of donating spell to supply them
 
-
-var donate_troop =new Array();
-var donate_spell =new Array();
 
 function close_and_recycle(packageName) {
     for(var i = 0;i<troop_pic_length;i++){
@@ -154,18 +155,6 @@ function close_and_recycle(packageName) {
         back();
     }
 }
-
-//give me a target picture,this function will click it
-function findAndClick(target) {
-    let p = findImage(captureScreen(), target);
-    if (p) {
-        click(p.x+100, p.y+30)
-        sleep(1000)
-    } else {
-        toastLog("can not find the target");
-    }
-}
-
 
 function clickAndSleep(x,y){
     click(x,y)
@@ -219,7 +208,6 @@ function doHelpTroop(){
     
 }
 
-
 function doHelpSpell(){
     let p = images.findMultiColors(captureScreen(), purple_pixel,
         [
@@ -269,9 +257,6 @@ function doHelpSpell(){
     
 }
 
-//before invoking: in chat page
-//after invoking:in chat page
-//find the donate button and click it 
 function do_help(){
     let p = findImage(captureScreen(), help);
     if (p) {
@@ -297,7 +282,7 @@ function moreResource(){
     var toMachine = false;
     var break_point_troop = 7;//used to record some activity troop
     var break_point_spell = 1;//used to record some activity spell
-    if(break_point_troop==0){
+    if(break_point_troop==-1){
         for(var i = 0;i<donate_troop.length;i++){
             if(0<=donate_troop[i]&&donate_troop[i]<=14){
                 clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
@@ -350,7 +335,7 @@ function moreResource(){
     donate_troop.length = 0;
 
     clickAndSleep(makeSpell_x,makeSpell_y);
-    if(break_point_spell==0){
+    if(break_point_spell==-1){
         for(var i = 0;i<donate_spell.length;i++){
             if(0<=donate_spell[i]&&donate_spell[i]<=6){
                 clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
@@ -415,6 +400,7 @@ function in_coc(){
     }
 
 }
+
 function main() {
     var attempt_times = 0;
     while(true){
@@ -422,7 +408,7 @@ function main() {
         sleep(30000);
         if(in_coc()){
             break;
-        }else if(attempt_times==5){
+        }else if(attempt_times==3){
             close_and_recycle("部落冲突");
             engines.myEngine().forceStop();
         }else{
@@ -455,7 +441,9 @@ function main() {
         }else{
             toastLog(current_time_in_minute-start_time_in_minute);
         }
-
+        if(!in_coc()){
+            break;
+        }
     }
 
     close_and_recycle("部落冲突");
@@ -465,6 +453,4 @@ function main() {
 
 
 images.requestScreenCapture(true);
-
-
 main();
