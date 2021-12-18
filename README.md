@@ -1,6 +1,6 @@
 # Script's Description（updating）
 
-​		The origin language of the readme is Chinese. If you are more comfortable reading in Chinese please click [here](https://github.com/maxwell142857/COC-donation-script).
+​		The origin language of the readme is Chinese. If you are more comfortable reading in Chinese please click [here](https://github.com/maxwell142857/COC-donation-script/blob/master/README_Chinese.md).
 
 ## Disclaimer
 ​		This script is used for learning the Auto.js framework only. Please do not use it out of other purpose.
