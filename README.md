@@ -1,38 +1,37 @@
-# 捐兵脚本使用说明（维护中）
+# Script's Description（updating）
 
-## 免责申明
-​		本脚本仅用于初学者学习auto.js框架，禁止用于其他用途。
+​		The origin language of the readme is Chinese. If you are more comfortable reading in Chinese please click [here](https://github.com/maxwell142857/COC-donation-script).
 
-## 维护说明
+## Disclaimer
+​		This script is used for learning the Auto.js framework only. Please do not use it out of other purpose.
 
-​		本脚本作者是一位部落首领，只要还在玩COC,这个脚本就会一直维护；如果本脚本停止维护，会在标题中说明。顺便给自己的部落做一个宣传，如果想体验这个脚本的效果请加入此部落：沙漠绿洲，#2L20Q9GP9
+## Maintenance
+
+​		The author of the script is also a leader of the clan. I would keep updating this script as long as I still play COC. If I abandon it eventually I would show it in the title. By the way I also want to advertise my own clan. If you want to experience this script just join us: 沙漠绿洲，#2L20Q9GP9.
 
 
-## 功能描述
+## Function Description
 
-​		监听部落聊天中的援军请求（军队，法术，攻城机器），如果库存（已经造出的）中有，就会执行捐兵并会补充刚才捐出的内容。也就是说，你的库存的种类决定了这个脚本能捐什么样的援军。
+​		This script can monitor the donation requests in the clan chat. If the things in repository(things you have already trained) can help, then the script would do donation. In other word, the category of your repository decides this script can donate what type of troops, spells and siege machines.
 
-## 准备工作
+## Preparation 
 
-+ 一台不会太卡的安卓操作系统手机，用于挂脚本。请确保该手机处于电源充足，并且网络流畅的环境。
-+ 一个等级较高的COC账号，捐兵等级太低部落成员可不太乐意~
-+ Auto.js框架，这原本是一款免费的开源软件，后来需要付费了。功能非常的强大，值得购买。（我也想过把脚本打包成.apk文件，但最终没这个做。因为我知道我写的代码内容难以适配所有机型，所以请大家结合自己的机型修改脚本的内容,在脚本说明部分会告诉大家哪些地方需要修改）[附Auto.js链接](https://hyb1996.github.io/AutoJs-Docs/#/)
++ A phone with Android operation system, using for hang up the script. Please make sure the battery is abundant and the wifi condition is good.
++ A COC game account with high level. People are not willing to get low-level donation.
++ Auto.js framework. It is used to be a free open source software. Sadly it needs money now but I think it worth buying as its ample functions.(I used to think that maybe I should package this script into .apk file. Eventually I didn't do it as I knew that this script is not suitable for all mobile's type. So please modify it due to your own environment. I would tell you how to do it in Description part). Here is a link to [Auto.js](https://hyb1996.github.io/AutoJs-Docs/#/)
 
-## 使用脚本
+## How to Use it
 
-+ 下载Auto.js，首先为Auto.js开启无障碍服务
++ Download the Auto.js. Then open accessibility services for Auto.js.
++ Put help.js in Auto.js default path.
++ Put coc_picture in Auto.js default path.
++ Simply run help.js. This script would open the COC automatically.
 
-+ 将help.js放置在Auto.js默认路径下
+## Description
 
-+ 将coc_picture文件夹放置在Auto.js默认路径下(即与脚本同级)
+​		This part would give specific demonstration of the script. 
 
-+ 运行help.js即可，该脚本会自动打开部落冲突
-
-## 脚本说明
-
-​		这一部分的内容将会对470行的代码进行详细的说明，请务必根据说明修改脚本使得其在自己手机可用。
-
-​		第一部分是本脚本用到的全局变量，在注释中已对变量进行了解释，在此就不进行赘述。
+​		The first part of the script is the global variable. You can know the usage of it from its comment.
 
 ```javascript
 setScreenMetrics(1080, 2312);//这行代码可以让auto.js根据手机的型号自动调整点击的位置 this line can make auto.js adjust the clicking point due to moblie's type
@@ -143,7 +142,7 @@ var donate_spell =new Array();//记录捐出法术的编号，用于补充 recor
 
 ```
 
-接下来的这个函数，传入COC软件的名称。它会释放图片资源并且结束入参软件的运行。关闭软件的思路如下：首先打开操作系统的程序列表，然后找到COC,用正则去匹配带有”强行停止“之类的按钮，点击；此时我的机型会有一个确认的弹窗，再次去用正则去匹配带有”强行停止“之类的按钮，点击即可。
+​		The following function needs a parameter, which is the app name you want to end. It can release the picture resource s and terminate the app. The main design is as follows: Firstly it can open the operation system's procedure lists, then find the COC. Then find some button with text like "force stop" by regular expression and click it. At this time my operation system would prompt whether I confirm to force stop it. So I need  finding some button with text like "force stop" by regular expression and click it again. Then the COC would be killed. （"强 停 结 行" in Chinese have similar meanings to "force stop"）
 
 ```javascript
 function close_and_recycle(packageName) {
@@ -198,7 +197,7 @@ function close_and_recycle(packageName) {
 }
 ```
 
-这个函数用于点击某个点并休眠一秒。注意所有的点击操作最好都带上休眠，程序的响应不是即时的，有一个延时。
+​		This function is used to click certain point and sleep for one second. Be sure to stop for a while when you do click operation as the mobile needs time answering.
 
 ```
 function clickAndSleep(x,y){
@@ -207,7 +206,7 @@ function clickAndSleep(x,y){
 }
 ```
 
-这个函数作用是增援军队和攻城机器，当点击”增援“后，出现的页面中调用这个函数。p是在匹配是否有可以增援的军队或攻城机器，如果有，使用image.clip把能增援的对象截图,然后将该截图和本地的所有法术图像做对比，找到是哪一个。接着点击该点进行增援，并记录增援了什么（更新donate_troop）。最后再次调用自己，重复以上步骤直到没有可以增援的军队或攻城机器。
+​		This function is used to donate the troops and siege machines. You should invoke this function after you click the donate button in chat page. "p" is for checking whether there is a donatable square. If so, using image.clip to clip the screenshot to get the target. Then looking though all the local picture  to find the type of donation. Do the donation and record the index(update donate_troop). At last invoke itself and repeat the above progress util there is nothing can donate.
 
 ```javascript
 function doHelpTroop(){
@@ -258,7 +257,7 @@ function doHelpTroop(){
 }
 ```
 
-这个函数作用是增援法术，当点击”增援“后，出现的页面中调用这个函数。p是在匹配是否有可以增援的法术，如果有，使用image.clip把能增援的法术截图,然后将该截图和本地的所有法术图像做对比，找到是哪一个。接着点击该点进行增援，并记录增援了什么((更新donate_spell)。最后再次调用自己，重复以上步骤直到没有可以增援的法术。
+​		This function is used to donate the spells. You should invoke this function after you click the donate button in chat page. "p" is for checking whether there is a donatable square. If so, using image.clip to clip the screenshot to get the target. Then looking though all the local picture  to find the type of donation. Do the donation and record the index(update donate_spell). At last invoke itself and repeat the above progress util there is nothing can donate.
 
 ```javascript
 function doHelpSpell(){
@@ -311,7 +310,7 @@ function doHelpSpell(){
 }
 ```
 
-这个函数在聊天界面被调用，它会找到”增援的按钮并点击，并调用增援法术和增援部队两个函数。当增援完毕后，会看看页面是否存在“快速增援”按钮，如果有，就手动点击退出此次增援，回到聊天界面；如果没有，就说明本请求已经完成，已回到聊天界面。
+​		This function should be invoked in the chat page. It can find the "donate" button and  click it, then invoke doHelpSpell and doHelpTroop. After that, it would check whether there is "quick donate" button. If so, then click to close this donation page. If not, this means that this donation is over and it is already in the chat page.
 
 ```javascript
 function do_help(){
@@ -333,9 +332,9 @@ function do_help(){
 
 
 
-​		这个函数用于补充已经捐出的资源。这里说一下break_point的作用：COC有时会推出活动兵种和活动法术，这样就会导致该位置以后的编号是错误的，而且我们并不能知道活动兵种或法术出现在哪里。如果没有活动，则这两个变量都为-1;否则即为活动兵种或法术出现的位置编号，后面的代码会根据这个断点进行调整。
+​		This function is used to supply the things you have given off. First I'd like to explain the usage of break_point: Occasionally COC would launch new activity with new troop and new spell. By then the index of the used troop or spell would bein a mess. So I use the break point to solve this problem. When there is no activity, the value of them would be -1. Otherwise, it would be the index of the new appearing troop or spell. The logic of code can modify its behavior due to break point.
 
-​		大致流程如下：首先打开造兵的界面，然后把donate_troop和donate_spell中的内容按照编号排序。先造普通兵种，然后滑动屏幕到暗黑兵种，造暗黑兵种，再点击造攻城机器。法术补充同理。最后清空两个List,并关闭造兵页面。
+​		The rough progress is as follows: At beginning open the page where we can train. Then sort the list of donate_troop and donate_spell due to the value(index of the troop or spell). Then train the normal troop,then slip the screen to train dark troop. Then make the siege machine. Do the same thing to the spell. Finally clear two lists and close the training page. 
 
 ```javascript
 function moreResource(){
@@ -434,7 +433,7 @@ function moreResource(){
 }
 ```
 
-​		这个函数在聊天窗口调用，用于点击返回底部的按钮。为了保证返回底部按钮显示完全能被图像匹配到，我们先有一个上滑的动作。
+​		This function is invoked in chat page. It is used for click the button to return to bottom of the chat. To make sure the button is complete, we firstly up slip the chat page.
 
 ```javascript
 function chat_to_lowest(){
@@ -448,7 +447,7 @@ function chat_to_lowest(){
 }
 ```
 
-​		这个函数用于找到上一个聊天界面中的捐兵请求。
+​		This function is used to find the next request in the chat page.
 ```javascript
 function chat_to_up(){
     let p = findImage(captureScreen(), chat_up);
@@ -462,7 +461,7 @@ function chat_to_up(){
 }
 ```
 
-​		这个函数用于判断当前页面是否处在游戏进入的第一个界面。由于游戏进入的第一个界面很难提炼出关键特征，故我采用了如下方法：先点击左下角的进攻按钮，此时出现的三个模式选择按钮用于判定是否进入了游戏；如果匹配成功，则点击返回，说明在游戏的第一个界面；否则说明没有在，脚本的执行即将不符合预期。
+​		This function is used to judge whether the current page is in the first page of COC. Because it is difficult to extract the unique feature in first page,so I use the following strategy:  Click the left bottom button, then we check whether there are tree modes to choose. If so, then click to back and return true indicating the script is normal. If not, return false,indicating the script is out of expectancy.
 
 ```javascript
 function in_coc(){
@@ -478,17 +477,17 @@ function in_coc(){
 }
 ```
 
-​		终于，到了主函数了。主函数首先试图打开部落冲突,会尝试3次，如果3次都失败，脚本结束。
+​		Finally, we step into the main function. The main function would attempt to open the COC three times. If all fail, end the script.
 
-​		如果成功进入，则记录当前的系统时间。
+​		If success, read the system time and record it in minutes.
 
-​		接着进入一个很大的while(true)循环，用于监听部落聊天，捐兵，补充。有两种情况会跳出这个循环：
+​		Then move into a long while(true) circulation, aiming to listening the chat page, do donation and supply. We should step out of it in following two circumstance:
 
-​		其一，每次循环会读取系统时间，再和第一次进入的时间做差即可得到此脚本已经运行了多少分钟了。如果时间大于duration_in_minute（由于部落冲突单次在线时间不能超过4小时，所以我们需要设定一个小于4小时的时间，自行下线并结束脚本，等一段时间后，再次运行脚本。Auto.js可以定时开启脚本，所以先在Auto.js设置好每隔4小时运行这个脚本，而这个脚本自己在运行大约3小时40分钟后就会自行结束），则跳出。
+​		First, every circulation we would read the current time, the do subtraction to the initial launch time we can know how long the script already run. If the duration longer than duration_in_minute(Because we can not be online greater than 4 hours one time, so we need to set a time less than 4 hours to be off line by ourselves. Waiting for a few time, then run the script again. Auto.js can run the script in appointed time so we can set 4 hours as interval in advance while the script would kill itself after running for 3hour40min), jump out.
 
-​		其二，每次循环后判断一下是否在登入游戏的第一个界面，如果不是，说明状态机不正确，跳出。
+​		Second, every circulation we judge whether the page is still in the first page. If not, we are in a wrong situation, jump out.
 
-​		跳出循环后，即为释放资源，关闭部落冲突。
+​		After jumping out, we release the resource and close the COC.
 
 ```javascript
 function main() {
@@ -542,13 +541,9 @@ function main() {
 
 
 
-## 联系我
+## Contact me
 
-​		如果你有任何想法，非常欢迎和我交流：ywhf00@gmail.com
+​		If you have any idea please feel free to contact me：ywhf00@gmail.com
 
-​		最后，如果这个项目帮到了你，可以给我一颗星星么:heart:
-
-## 停止使用脚本
-
-+ 音量上键
+​		Lastly, if this project gives you some help, can you give me a star？ :heart:
 
