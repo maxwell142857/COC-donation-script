@@ -1,9 +1,3 @@
-/*
-打开部落聊天(135,480)
-关闭部落聊天(840,480)
-
-
-*/
 let chatOn_x = Number(135)
 let chatOn_y = Number(480)
 let chatOff_x = Number(840)
@@ -12,7 +6,11 @@ let trainOn_x = Number(135)
 let trainOn_y = Number(780)
 let trainOff_x = Number(1995)
 let trainOff_y = Number(50)
-
+let attack_x = Number(180)
+let attack_y = Number(950)
+let most_right_x = Number(2300)
+let most_right_y = Number(525)
+ 
 let trainTroop_x = Number(760)
 let trainTroop_y = Number(70)
 let makeSpell_x = Number(1090)
@@ -41,10 +39,14 @@ let helpOff_y = Number(125)
 
 let help = images.read("./coc_picture/help.jpg")
 let quick_help = images.read("./coc_picture/quick_help.jpg")
+let chat_up = images.read("./coc_picture/chat_up.jpg")
+let chat_lowest = images.read("./coc_picture/chat_lowest.jpg")
+let attack_mode = images.read("./coc_picture/attack.jpg")
 
 let blue_pixel = -12748363; //we use this pixel to decide which square is donatable troop
 let purple_pixel = -9615939;//we use this pixel to decide which square is donatable spell
-
+let green_pixel = -4861641;//we use this pixel to decide which square is quick donatable
+let duration_in_minute = Number(220);//the longest time you can be online is 4 hours,so you need relaunch the app less than 4 hour
 
 //接下来的这个数组用于存储所有兵种图片，0是野蛮人，1是弓箭手，2是巨人，3是哥布林，4是炸弹人，5是气球，6是法师，7是天使，8是火龙，9是皮卡
 //10是龙宝，11是矿工，12是雷龙，13是雪怪，14是龙骑士，注意在造兵页面这里有空格，15是亡灵，16是野猪，17女武神，18石头人，19女巫，20天狗，
@@ -102,7 +104,30 @@ spell_pic_length = Number(12)
 var donate_troop =new Array();
 var donate_spell =new Array();
 
-function close(packageName) {
+function close_and_recycle(packageName) {
+    for(var i = 0;i<troop_pic_length;i++){
+        if(troop_pic[i]){
+            troop_pic[i].recycle();
+        }else{
+            toastLog("troop not recycle:"+i)
+        }
+    }
+
+    for(var i = 0;i<spell_pic_length;i++){
+        if(spell_pic[i]){
+            spell_pic[i].recycle();
+        }else{
+            toastLog("spell not recycle:"+i)
+        }
+    }
+
+    help.recycle();
+    quick_help.recycle();
+    chat_up.recycle();
+    chat_lowest.recycle();
+    attack_mode.recycle();
+
+
     var name = getPackageName(packageName);
     if (!name) {
         if (getAppName(packageName)) {
@@ -116,8 +141,11 @@ function close(packageName) {
     text(app.getAppName(name)).waitFor();
     let is_sure = textMatches(/(.*强.*|.*停.*|.*结.*|.*行.*)/).findOne();
     if (is_sure.enabled()) {
-        textMatches(/(.*强.*|.*停.*|.*结.*|.*行.*)/).findOne().click();
-        textMatches(/(.*确.*|.*定.*)/).findOne().click();
+        // textMatches(/(.*强.*|.*停.*|.*结.*|.*行.*)/).findOne().click();
+        click("强行停止",0)
+        sleep(2000);
+        // textMatches(/(.*确.*|.*定.*)/).findOne().click();
+        click("强行停止",1)
         log(app.getAppName(name) + "应用已被关闭");
         sleep(5000);
         back();
@@ -138,57 +166,11 @@ function findAndClick(target) {
     }
 }
 
-function findAndClickInRange(target,x,y,x_range,y_range) {
-    let p = findImage(captureScreen(), target,
-        {
-            region: [x, y, x_range, y_range],
-        }
-    );
-    if (p) {
-        click(p.x+100, p.y+30)
-        sleep(1000)
-    } else {
-        toastLog("can not find the target");
-    }
-    target.recycle();
-}
 
 function clickAndSleep(x,y){
     click(x,y)
     sleep(1000)
 }
-
-// function doHelp(){
-//     let p = findImage(captureScreen(), blue_background,
-//         {
-//             // region: [help_panel_troop_x_start, help_panel_troop_y_start, help_panel_troop_x_range, help_panel_troop_y_range],
-//             threshold: 0.85
-//         }
-//     );
-//     if (p) {
-//         // toastLog("find the target"+p.x+","+p.y);
-//         target = images.clip(captureScreen(), p.x, p.y-130, 130, 130)
-//         images.save(target, "./coc_picture/tmp.jpg", "jpg",100)
-//         for(var i = 0;i<troop_pic_length;i++){
-//             if(troop_pic[i]){
-//                 let pp = findImage(target, troop_pic[i],
-//                 {
-//                     threshold: 0.5
-//                 });
-//                 if(pp){
-//                     toastLog("find it in troop_pic! index:"+i);
-//                     sleep(1000);
-//                     break;
-//                 }
-//             }
-//         }
-//         clickAndSleep(p.x+50, p.y-50);
-//         target.recycle()
-//         doHelp();
-//     } else {
-//         toastLog("can not find!");
-//     }
-// }
 
 function doHelpTroop(){
     let p = images.findMultiColors(captureScreen(), blue_pixel,
@@ -233,8 +215,6 @@ function doHelpTroop(){
         clickAndSleep(p.x+50, p.y-50);
         target.recycle()
         doHelpTroop();
-    } else {
-        
     }
     
 }
@@ -289,6 +269,24 @@ function doHelpSpell(){
     
 }
 
+//before invoking: in chat page
+//after invoking:in chat page
+//find the donate button and click it 
+function do_help(){
+    let p = findImage(captureScreen(), help);
+    if (p) {
+        clickAndSleep(p.x+100, p.y+30);
+        doHelpTroop();
+        doHelpSpell();
+        let pp = findImage(captureScreen(), quick_help);
+        if(pp){
+            clickAndSleep(helpOff_x,helpOff_y);
+        }
+    } else {
+        toastLog("can not find the donate button ");
+    }
+
+}
 
 function moreResource(){
     clickAndSleep(trainOn_x,trainOn_y);
@@ -297,84 +295,170 @@ function moreResource(){
     donate_spell.sort((a,b)=>Number(a)-Number(b));
     var toDark = false;
     var toMachine = false;
-    for(var i = 0;i<donate_troop.length;i++){
-        if(0<=donate_troop[i]&&donate_troop[i]<=14){
-            clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
-        }else if (15<=donate_troop[i]&&donate_troop[i]<=23){
-            if(!toDark){
-                swipe(1500, 700, 500, 700, 500);
-                sleep(2000);
-                toDark = true
+    var break_point_troop = 7;//used to record some activity troop
+    var break_point_spell = 1;//used to record some activity spell
+    if(break_point_troop==0){
+        for(var i = 0;i<donate_troop.length;i++){
+            if(0<=donate_troop[i]&&donate_troop[i]<=14){
+                clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
+            }else if (15<=donate_troop[i]&&donate_troop[i]<=23){
+                if(!toDark){
+                    swipe(1500, 700, 500, 700, 500);
+                    sleep(2000);
+                    toDark = true
+                }
+                var tmp = donate_troop[i]-15;
+                clickAndSleep(darkTroop_x+Math.floor(tmp/2)*square_length,darkTroop_y+(tmp%2)*square_length);
+            }else if (24<=donate_troop[i]&&donate_troop[i]<=28){
+                if(!toMachine){
+                    clickAndSleep(makeMachine_x,makeMachine_y);
+                    toMachine =true;
+                }
+                var tmp = donate_troop[i]-24;
+                clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+            }else{
+                toastLog("军队制造列表混进来了奇怪的东西"+i);
             }
-            var tmp = donate_troop[i]-15;
-            clickAndSleep(darkTroop_x+Math.floor(tmp/2)*square_length,darkTroop_y+(tmp%2)*square_length);
-        }else if (24<=donate_troop[i]&&donate_troop[i]<=28){
-            if(!toMachine){
-                clickAndSleep(makeMachine_x,makeMachine_y);
-                toMachine =true;
+        }
+    }else{
+        for(var i = 0;i<donate_troop.length;i++){
+            if(0<=donate_troop[i]&&donate_troop[i]<=break_point_troop-1){
+                clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
+            }else if(break_point_troop<=donate_troop[i]&&donate_troop[i]<=14){
+                donate_troop[i]++;
+                clickAndSleep(normalTroop_x+Math.floor(donate_troop[i]/2)*square_length,normalTroop_y+(donate_troop[i]%2)*square_length)
+            }else if (15<=donate_troop[i]&&donate_troop[i]<=23){
+                if(!toDark){
+                    swipe(1500, 700, 500, 700, 500);
+                    sleep(2000);
+                    toDark = true
+                }
+                var tmp = donate_troop[i]-15;
+                clickAndSleep(darkTroop_x+Math.floor(tmp/2)*square_length,darkTroop_y+(tmp%2)*square_length);
+            }else if (24<=donate_troop[i]&&donate_troop[i]<=28){
+                if(!toMachine){
+                    clickAndSleep(makeMachine_x,makeMachine_y);
+                    toMachine =true;
+                }
+                var tmp = donate_troop[i]-24;
+                clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+            }else{
+                toastLog("军队制造列表混进来了奇怪的东西"+i);
             }
-            var tmp = donate_troop[i]-24;
-            clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
-        }else{
-            toastLog("军队制造列表混进来了奇怪的东西"+i);
         }
     }
     donate_troop.length = 0;
 
     clickAndSleep(makeSpell_x,makeSpell_y);
-    for(var i = 0;i<donate_spell.length;i++){
-        if(0<=donate_spell[i]&&donate_spell[i]<=6){
-            clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
-        }else if (7<=donate_spell[i]&&donate_spell[i]<=11){
-            var tmp = donate_spell[i]-7;
-            clickAndSleep(darkSpell_x+Math.floor(tmp/2)*square_length,darkSpell_y+(tmp%2)*square_length);
-        }else{
-            toastLog("法术制造列表混进来了奇怪的东西"+i);
+    if(break_point_spell==0){
+        for(var i = 0;i<donate_spell.length;i++){
+            if(0<=donate_spell[i]&&donate_spell[i]<=6){
+                clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
+            }else if (7<=donate_spell[i]&&donate_spell[i]<=11){
+                var tmp = donate_spell[i]-7;
+                clickAndSleep(darkSpell_x+Math.floor(tmp/2)*square_length,darkSpell_y+(tmp%2)*square_length);
+            }else{
+                toastLog("法术制造列表混进来了奇怪的东西"+i);
+            }
+        }
+    }else{
+        for(var i = 0;i<donate_spell.length;i++){
+            if(0<=donate_spell[i]&&donate_spell[i]<=break_point_spell-1){
+                clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
+            }else if(0<=donate_spell[i]&&donate_spell[i]<=6){
+                donate_spell[i]++;
+                clickAndSleep(normalSpell_x+Math.floor(donate_spell[i]/2)*square_length,normalSpell_y+(donate_spell[i]%2)*square_length)
+            }else if (7<=donate_spell[i]&&donate_spell[i]<=11){
+                var tmp = donate_spell[i]-7;
+                clickAndSleep(darkSpell_x+Math.floor(tmp/2)*square_length,darkSpell_y+(tmp%2)*square_length);
+            }else{
+                toastLog("法术制造列表混进来了奇怪的东西"+i);
+            }
         }
     }
+    
     donate_spell.length = 0;
 
     clickAndSleep(trainOff_x,trainOff_y);
 
 }
+
+function chat_to_lowest(){
+    //make sure the image is complete
+    swipe(350, 350, 350, 750, 500);
+    sleep(2000)
+    let p = findImage(captureScreen(), chat_lowest);
+    if (p) {
+        clickAndSleep(p.x+30, p.y+30);
+    }
+}
+
+function chat_to_up(){
+    let p = findImage(captureScreen(), chat_up);
+    if (p) {
+        clickAndSleep(p.x+10, p.y+30);
+        return true;
+    } else {
+        toastLog("no need to up");
+        return false;
+    }
+}
+
+function in_coc(){
+    clickAndSleep(attack_x,attack_y);
+    let p = findImage(captureScreen(), attack_mode);
+    if (!p) {
+        return false;
+    } else {
+        clickAndSleep(most_right_x,most_right_y);
+        return true;
+    }
+
+}
 function main() {
-
-    toast("将于1秒后开始");
-    // sleep(2000);
-    // launchApp("部落冲突");
-    // sleep(20000);
-    sleep(1000)
-    clickAndSleep(chatOn_x, chatOn_y);
-    findAndClick(help);
-    doHelpTroop();
-    doHelpSpell();
-    let p = findImage(captureScreen(), quick_help);
-    if(p){
-        clickAndSleep(helpOff_x,helpOff_y);
+    var attempt_times = 0;
+    while(true){
+        launchApp("部落冲突");
+        sleep(30000);
+        if(in_coc()){
+            break;
+        }else if(attempt_times==5){
+            close_and_recycle("部落冲突");
+            engines.myEngine().forceStop();
+        }else{
+            attempt_times ++;
+        }
     }
-    clickAndSleep(chatOff_x,chatOff_y);
-    moreResource();
-    // clickAndSleep(chatOff_x, chatOff_y)
     
-    // close("部落冲突");
+    var start_time = new Date();
+    var start_time_in_minute = start_time.getHours()*60+start_time.getMinutes()
 
-    for(var i = 0;i<troop_pic_length;i++){
-        if(troop_pic[i]){
-            troop_pic[i].recycle();
-        }else{
-            toastLog("troop not recycle:"+i)
+    while(true){
+        clickAndSleep(chatOn_x, chatOn_y);
+        while(true){
+            do_help();
+            if(!chat_to_up()){
+                chat_to_lowest();
+                break;
+            }
         }
+        clickAndSleep(chatOff_x,chatOff_y);
+        if(donate_spell.length>0||donate_troop.length>0){
+            moreResource();
+        }
+        toastLog("I am going to sleep 60 seconds!")
+        sleep(60000);
+        var current_time = new Date();
+        var current_time_in_minute = current_time.getHours()*60+current_time.getMinutes()
+        if(current_time_in_minute-start_time_in_minute>duration_in_minute){
+            break;
+        }else{
+            toastLog(current_time_in_minute-start_time_in_minute);
+        }
+
     }
 
-    for(var i = 0;i<spell_pic_length;i++){
-        if(spell_pic[i]){
-            spell_pic[i].recycle();
-        }else{
-            toastLog("spell not recycle:"+i)
-        }
-    }
-    help.recycle();
-    quick_help.recycle();
+    close_and_recycle("部落冲突");
 }
 
 
