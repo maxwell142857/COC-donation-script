@@ -46,11 +46,11 @@ let duration_in_minute = Number(220);//the longest time you can be online is 4 h
 
 //接下来的这个数组用于存储所有兵种图片，0是野蛮人，1是弓箭手，2是巨人，3是哥布林，4是炸弹人，5是气球，6是法师，7是天使，8是火龙，9是皮卡
 //10是龙宝，11是矿工，12是雷龙，13是雪怪，14是龙骑士，注意在造兵页面这里有空格，15是亡灵，16是野猪，17女武神，18石头人，19女巫，20天狗，
-//21蓝胖，22冰人，23猎手,24战车,25飞艇,26大气球,27训练营,28滚木车
+//21蓝胖，22冰人，23猎手,24战车,25飞艇,26大气球,27训练营,28滚木车,29投石车
 //the following array is used to store all the pictures of troop and siege machine. 0 barbarin,1 archer,2 giant,3 goblin,4 wall breaker,
 //5 balloon,6 wizard,7 healer,8 dragon,9 PEKKA,10 baby dragon,11 miner,12 electron dragon,13 yeti, 14 dragon rider, attention there is space in page,
 //15 mininon,16 hog rider,17 valkyrie,18 golem,19 witch,20 lava hound,21 bowler,22 ice golem,23 headhunter
-//24 wall wrecker,25 battle blimp,26 stone slammer,27 siege barracks,28 log laucher
+//24 wall wrecker,25 battle blimp,26 stone slammer,27 siege barracks,28 log laucher,29 flame flinger
 var troop_pic=new Array();
 troop_pic[0] = images.read("./coc_picture/troop_savage.jpg")
 troop_pic[1] = images.read("./coc_picture/troop_archar.jpg")
@@ -81,7 +81,8 @@ troop_pic[25] = images.read("./coc_picture/machine_feiTing.jpg")
 troop_pic[26] = images.read("./coc_picture/machine_daQiQiu.jpg")
 troop_pic[27] = images.read("./coc_picture/machine_xunLianYing.jpg")
 troop_pic[28] = images.read("./coc_picture/machine_gunMu.jpg")
-troop_pic_length = Number(29)
+troop_pic[29] = images.read("./coc_picture/machine_flame.jpg") //need to be done:more resource
+troop_pic_length = troop_pic.length;
 
 //接下来这个数组用于存放法术的图片,0闪电,1治疗,2狂暴,3弹跳,4冰冻,5镜像,6隐身,注意在造法术页面这里有空格,7毒药,8地震,9急速,10骷髅,11蝙蝠
 //the following array is used to store all the pictures of spell, 0 lighting,1 healing,2 rage,3 jump,4 freeze,5 clone,6 invisibility
@@ -99,7 +100,7 @@ spell_pic[8] = images.read("./coc_picture/spell_diZheng.jpg")
 spell_pic[9] = images.read("./coc_picture/spell_jiSu.jpg")
 spell_pic[10] = images.read("./coc_picture/spell_kuLou.jpg")
 spell_pic[11] = images.read("./coc_picture/spell_bianFu.jpg")
-spell_pic_length = Number(12)
+spell_pic_length = spell_pic.length;
 
 var donate_troop =new Array();//记录捐出兵种和攻城机器的编号，用于补充 record the index of donating troop and siege machine to supply them
 var donate_spell =new Array();//记录捐出法术的编号，用于补充 record the index of donating spell to supply them
@@ -190,7 +191,6 @@ function doHelpTroop(){
                     threshold: 0.9
                 });
                 if(pp){
-                    toastLog("find it in troop_pic! index:"+i);
                     donate_troop.push(i);
                     sleep(1000);
                     findIt = true;
@@ -199,6 +199,8 @@ function doHelpTroop(){
             }
         }
         if(!findIt){
+            var time = new Date();
+            images.save(target,"./error/"+time.toTimeString()+"unrecognizable.png")
             toastLog("can not find it in troop_pic")
         }
         clickAndSleep(p.x+50, p.y-50);
@@ -237,7 +239,6 @@ function doHelpSpell(){
                     threshold: 0.9
                 });
                 if(pp){
-                    toastLog("find it in spell_pic! index:"+i);
                     donate_spell.push(i);
                     sleep(1000);
                     findIt = true;
@@ -246,6 +247,8 @@ function doHelpSpell(){
             }
         }
         if(!findIt){
+            var time = new Date();
+            images.save(target,"./error/"+time.toTimeString()+"unrecognizable.png")
             toastLog("can not find it in spell_pic");
         }
         clickAndSleep(p.x+50, p.y-50);
@@ -297,7 +300,7 @@ function moreResource(){
                 }
                 var tmp = donate_troop[i]-15;
                 clickAndSleep(darkTroop_x+Math.floor(tmp/2)*square_length,darkTroop_y+(tmp%2)*square_length);
-            }else if (24<=donate_troop[i]&&donate_troop[i]<=28){
+            }else if (24<=donate_troop[i]&&donate_troop[i]<=29){
                 if(!toMachine){
                     clickAndSleep(makeMachine_x,makeMachine_y);
                     toMachine =true;
@@ -323,7 +326,7 @@ function moreResource(){
                 }
                 var tmp = donate_troop[i]-15;
                 clickAndSleep(darkTroop_x+Math.floor(tmp/2)*square_length,darkTroop_y+(tmp%2)*square_length);
-            }else if (24<=donate_troop[i]&&donate_troop[i]<=28){
+            }else if (24<=donate_troop[i]&&donate_troop[i]<=29){
                 if(!toMachine){
                     clickAndSleep(makeMachine_x,makeMachine_y);
                     toMachine =true;
@@ -387,7 +390,6 @@ function chat_to_up(){
         clickAndSleep(p.x+10, p.y+30);
         return true;
     } else {
-        toastLog("no need to up");
         return false;
     }
 }
@@ -396,6 +398,8 @@ function in_coc(){
     clickAndSleep(attack_x,attack_y);
     let p = findImage(captureScreen(), attack_mode);
     if (!p) {
+        var time = new Date();
+        images.captureScreen("./error/"+time.toTimeString()+"not_in_coc.png")
         return false;
     } else {
         clickAndSleep(most_right_x,most_right_y);
@@ -435,16 +439,18 @@ function main() {
         if(donate_spell.length>0||donate_troop.length>0){
             moreResource();
         }
-        toastLog("I am going to sleep 60 seconds!")
+        toast("I am going to sleep 60 seconds!")
         sleep(60000);
         var current_time = new Date();
         var current_time_in_minute = current_time.getHours()*60+current_time.getMinutes()
         if(current_time_in_minute-start_time_in_minute>duration_in_minute){
+            toastLog("time is up, I am going to rest~");
             break;
         }else{
-            toastLog(current_time_in_minute-start_time_in_minute);
+            toast(current_time_in_minute-start_time_in_minute);
         }
         if(!in_coc()){
+            console.warn("run for "+(current_time_in_minute-start_time_in_minute)+"time, something wrong!");
             break;
         }
     }
