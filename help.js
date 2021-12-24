@@ -463,8 +463,11 @@ function main() {
             toast(current_time_in_minute-start_time_in_minute);
         }
         if(!in_coc()){
-            console.warn("run for "+(current_time_in_minute-start_time_in_minute)+"time, something wrong!");
-            break;
+            sleep(2000)
+            if(!in_coc()){
+                console.warn("run for "+(current_time_in_minute-start_time_in_minute)+"time, something wrong!");
+                break;
+            }
         }
     }
 
