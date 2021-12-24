@@ -272,8 +272,6 @@ function do_help(){
         if(pp){
             clickAndSleep(most_right_x,most_right_y);
         }
-    } else {
-        toastLog("can not find the donate button ");
     }
 
 }
@@ -435,9 +433,6 @@ function main() {
             attempt_times ++;
         }
     }
-    
-    var start_time = new Date();
-    var start_time_in_minute = start_time.getHours()*60+start_time.getMinutes()
 
     while(true){
         clickAndSleep(chatOn_x, chatOn_y);
@@ -456,11 +451,10 @@ function main() {
         sleep(60000);
         var current_time = new Date();
         var current_time_in_minute = current_time.getHours()*60+current_time.getMinutes()
-        if(current_time_in_minute-start_time_in_minute>duration_in_minute){
-            toastLog("time is up, I am going to rest~");
+        //the script would end in 11:40,15:40,19:40,23:40
+        if(current_time_in_minute==700||current_time_in_minute==940||current_time_in_minute==1180||current_time_in_minute==1420){
+            toastLog("time is up, I am going to rest~"+current_time.getHours()+":"+current_time.getMinutes());
             break;
-        }else{
-            toast(current_time_in_minute-start_time_in_minute);
         }
         if(!in_coc()){
             sleep(2000)
