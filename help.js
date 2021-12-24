@@ -29,10 +29,9 @@ let darkSpell_y = Number(655)
 let square_length = Number(200) //军队和法术一个格子的长度 square length in troop and spell
 let machine_x = Number(470) //攻城战车 wall wrecker
 let machine_y = Number(750) 
+let machine_right_x = Number(1480)  //投石车 flame flinger
+let machine_right_y = Number(750)
 let machine_square_length = Number(335) //攻城机器一个格子的长度 square length in siege machine
-
-let helpOff_x = Number(1800) //在向某人增援时，关闭增援  when donating to certain guy, close the page
-let helpOff_y = Number(125)
 
 let help = images.read("./coc_picture/help.jpg") //增援 donate
 let quick_help = images.read("./coc_picture/quick_help.jpg") //快速增援 quick donate
@@ -271,7 +270,7 @@ function do_help(){
         doHelpSpell();
         let pp = findImage(captureScreen(), quick_help);
         if(pp){
-            clickAndSleep(helpOff_x,helpOff_y);
+            clickAndSleep(most_right_x,most_right_y);
         }
     } else {
         toastLog("can not find the donate button ");
@@ -305,8 +304,15 @@ function moreResource(){
                     clickAndSleep(makeMachine_x,makeMachine_y);
                     toMachine =true;
                 }
-                var tmp = donate_troop[i]-24;
-                clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+                if(donate_troop[i]!=29){
+                    var tmp = donate_troop[i]-24;
+                    clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+                }else{
+                    swipe(1500, 700, 500, 700, 500);
+                    sleep(2000);
+                    clickAndSleep(machine_right_x,machine_right_y)
+                }
+                
             }else{
                 toastLog("军队制造列表混进来了奇怪的东西"+i);
             }
@@ -331,8 +337,15 @@ function moreResource(){
                     clickAndSleep(makeMachine_x,makeMachine_y);
                     toMachine =true;
                 }
-                var tmp = donate_troop[i]-24;
-                clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+                if(donate_troop[i]!=29){
+                    var tmp = donate_troop[i]-24;
+                    clickAndSleep(machine_x+tmp*machine_square_length,machine_y);
+                }else{
+                    swipe(1500, 700, 500, 700, 500);
+                    sleep(2000);
+                    clickAndSleep(machine_right_x,machine_right_y)
+                }
+                
             }else{
                 toastLog("军队制造列表混进来了奇怪的东西"+i);
             }
