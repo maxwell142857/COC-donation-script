@@ -1,4 +1,4 @@
-# Script's Description（updating）
+# Script's Description
 
 ​		The origin language of the readme is Chinese. If you are more comfortable reading in Chinese please click [here](https://github.com/maxwell142857/COC-donation-script/blob/master/README_Chinese.md).
 
@@ -7,7 +7,7 @@
 
 ## Maintenance
 
-​		The author of the script is also a leader of the clan. I would keep updating this script as long as I still play COC. If I abandon it eventually I would show it in the title. By the way I also want to advertise my own clan. If you want to experience this script just join us: 沙漠绿洲，#2L20Q9GP9.
+​		Stop maintenance.
 
 
 ## Function Description

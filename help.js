@@ -459,7 +459,7 @@ function main() {
         if(!in_coc()){
             sleep(2000)
             if(!in_coc()){
-                console.warn("run for "+(current_time_in_minute-start_time_in_minute)+"time, something wrong!");
+                console.warn("not in coc,something wrong!");
                 break;
             }
         }
